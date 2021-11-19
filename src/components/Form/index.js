@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "./styles";
 import axios from "axios";
 
-const Form = ({ edit, id }) => {
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [privacy, setPrivacy] = useState(false);
+const Form = ({ editar, id }) => {
+  const [nome, setNome] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [privacidade, setPrivacidade] = useState(false);
 
   const navigate = useNavigate();
 
@@ -15,14 +15,14 @@ const Form = ({ edit, id }) => {
     axios
       .get(`https://flashcard-api-mayck.herokuapp.com/api/colecoes/${id}`)
       .then(({ data }) => {
-        setName(data.nome);
-        setDesc(data.descricao);
-        setPrivacy(data.publico);
+        setNome(data.nome);
+        setDescricao(data.descricao);
+        setPrivacidade(data.publico);
       });
   }
 
   useEffect(() => {
-    edit && getData();
+    editar && getData();
   }, []);
 
   function enviar(e) {
@@ -31,9 +31,9 @@ const Form = ({ edit, id }) => {
     if (editar) {
       axios
         .put(`https://flashcard-api-mayck.herokuapp.com/api/colecoes/${id}`, {
-          nome: name,
-          descricao: desc,
-          publico: privacy,
+          nome,
+          descricao,
+          publico: privacidade,
         })
         .finally(() => {
           navigate("/cursos");
@@ -43,9 +43,9 @@ const Form = ({ edit, id }) => {
 
     axios
       .post("https://flashcard-api-mayck.herokuapp.com/api/colecoes", {
-        nome: name,
-        descricao: desc,
-        publico: privacy,
+        nome,
+        descricao,
+        publico: privacidade,
       })
       .finally(() => {
         navigate("/cursos");
@@ -60,15 +60,15 @@ const Form = ({ edit, id }) => {
     <Container onSubmit={enviar}>
       <label>Nome:</label>
       <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={nome}
+        onChange={(e) => setNome(e.target.value)}
         className="text"
         type="text"
       />
       <label>Descrição:</label>
       <textarea
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
+        value={descricao}
+        onChange={(e) => setDescricao(e.target.value)}
         className="text"
         style={{ resize: "none" }}
       />
@@ -78,9 +78,9 @@ const Form = ({ edit, id }) => {
           Público
         </label>
         <input
-          onChange={() => setPrivacy(true)}
+          onChange={() => setPrivacidade(true)}
           id="publico"
-          checked={privacy}
+          checked={privacidade}
           className="radioButton"
           type="radio"
         />
@@ -88,24 +88,26 @@ const Form = ({ edit, id }) => {
           Privacidade
         </label>
         <input
-          onChange={() => setPrivacy(false)}
+          onChange={() => setPrivacidade(false)}
           id="privado"
           checked={!privacidade}
           className="radioButton"
           type="radio"
         />
       </div>
-      <input
-        className="sendButton cancel"
-        type="button"
-        value="Cancel"
-        onClick={cancelar}
-      />
-      <input
-        className="sendButton"
-        type="submit"
-        value={editar ? "Save" : "Add"}
-      />
+      <div className="buttons">
+        <input
+          className="sendButton cancel"
+          type="button"
+          value="Cancel"
+          onClick={cancelar}
+        />
+        <input
+          className="sendButton"
+          type="submit"
+          value={editar ? "Salvar" : "Cadastrar"}
+        />
+      </div>
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import Curso from "../../components/Curso";
 
@@ -23,6 +24,9 @@ const Cursos = () => {
   return (
     <Container>
       <h1 className="title">Cursos</h1>
+      <Link className="add" to="/adicionar">
+        + Cadastrar
+      </Link>
       <div className="cursos">
         {cursos.map((c) => {
           return (
